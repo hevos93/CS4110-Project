@@ -11,3 +11,5 @@ Tasks:
 - Both implementations should be demostrated on the Zybo board
 
 - Compare the two implementations (Cost, effectiveness etc.)
+
+The sorting algorithms we have chosen to implement is: Bitonic Sort, Merge Sort and Radix Sort
