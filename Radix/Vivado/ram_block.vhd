@@ -6,7 +6,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 entity ram_block is
    generic(
-      ADDR_WIDTH: integer:=10; -- 1KB RAM
+      ADDR_WIDTH: integer:=4; -- 1KB RAM
       DATA_WIDTH: integer:=8
    );
    port(

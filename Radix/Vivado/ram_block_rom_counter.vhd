@@ -4,15 +4,17 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 entity ram_block_rom_counter is
    generic(
-      N: integer := 5; 
-      M: integer := 19
+      --N: integer := 5;
+      N: integer := 3; 
+      --M: integer := 19
+      M: integer := 16
    );
    port(
       clk, reset: in std_logic;
       syn_clr, load, en, up: in std_logic;
-      d: in std_logic_vector(N-1 downto 0);
+      d: in std_logic_vector(2 downto 0);
       max_tick, min_tick: out std_logic;
-      q: out std_logic_vector(N-1 downto 0)
+      q: out std_logic_vector(2 downto 0)
    );
 end ram_block_rom_counter;
 

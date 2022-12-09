@@ -4,8 +4,10 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 entity shift_rom_counter is
    generic(
-      N: integer := 5; 
-      M: integer := 19
+      --N: integer := 5; 
+      N: integer :=4;   
+      --M: integer := 19
+      M: integer :=16
    );
    port(
       clk, reset: in std_logic;

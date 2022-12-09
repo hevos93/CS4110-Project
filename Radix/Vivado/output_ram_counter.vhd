@@ -3,7 +3,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 entity output_ram_counter is
-   generic(N: integer := 10);
+   generic(N: integer := 4);
    port(
       clk, reset: in std_logic;
       syn_clr, load, en, up: in std_logic;

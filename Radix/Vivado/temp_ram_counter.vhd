@@ -3,13 +3,13 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 entity temp_ram_counter is
-   generic(N: integer := 10);
+   generic(N: integer := 4);
    port(
       clk, reset: in std_logic;
       syn_clr, load, en, up: in std_logic;
-      d: in std_logic_vector(N-1 downto 0);
+      d: in std_logic_vector(3 downto 0);
       max_tick, min_tick: out std_logic;
-      q: out std_logic_vector(N-1 downto 0)
+      q: out std_logic_vector(3 downto 0)
    );
 end temp_ram_counter;
 

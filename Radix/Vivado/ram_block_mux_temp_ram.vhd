@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity ram_block_mux_temp_ram is
    port(
       clk, reset: in std_logic;
-      signal sel: std_logic_vector(2 downto 0);
+      sel: std_logic_vector(2 downto 0);
       in0: in std_logic_vector(7 downto 0);
       in1: in std_logic_vector(7 downto 0);
       in2: in std_logic_vector(7 downto 0);

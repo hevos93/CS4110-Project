@@ -4,7 +4,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 entity input_mux_shift is
    port(
-      clk, reset: in std_logic;
+      clk, reset, sel: in std_logic;
       in1, in0: in std_logic_vector(7 downto 0);
    --   an: out std_logic_vector(3 downto 0);
       sseg: out std_logic_vector(7 downto 0)
@@ -15,7 +15,6 @@ architecture arch of input_mux_shift is
    -- refreshing rate around 800 Hz (50MHz/2^16)
    constant N: integer:=18;
    signal q_reg, q_next: unsigned(N-1 downto 0);
-   signal sel: std_logic;
 begin
    -- register
    process(clk,reset)

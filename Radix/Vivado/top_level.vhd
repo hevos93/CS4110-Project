@@ -27,75 +27,78 @@ architecture str_arch of radix is
    signal input, output: std_logic_vector(7 downto 0);
    signal tx_start, tx_done: std_logic;
    
-   signal input_ram_counter_clr, input_ram_counter_inc: std_logic;
+   signal input_ram_counter_clr, input_ram_counter_inc, input_ram_wr: std_logic;
    signal input_ram_addr: std_logic_vector(9 downto 0);
    signal input_ram_input_mux: std_logic_vector(7 downto 0);
    signal temp_ram_input_mux: std_logic_vector(7 downto 0);
    
+   signal input_mux_switch: std_logic;
+   
    signal shift_rom_counter_clr, shift_rom_counter_inc: std_logic;
-   signal shift_rom_addr: std_logic_vector(4 downto 0);
-   signal shift_rom_addr_mux:  std_logic_vector(4 downto 0);
+   signal shift_rom_addr: std_logic_vector(3 downto 0);
+   signal shift_rom_addr_mux:  std_logic_vector(3 downto 0);
+   signal shift_addr_mux:  std_logic_vector(2 downto 0);
    
    signal shift_input: std_logic_vector(7 downto 0);
    signal shift_output: std_logic_vector(2 downto 0);
-
+   
    
    signal ram0_in: std_logic_vector(7 downto 0);
-   signal ram0_counter_clr, ram0_counter_inc: std_logic;
-   signal output_ram0_counter: std_logic_vector(4 downto 0);
+   signal ram0_counter_clr, ram0_counter_inc, ram0_wr: std_logic;
+   signal output_ram0_counter: std_logic_vector(3 downto 0);
    signal ram0_out: std_logic_vector(7 downto 0);
    
    signal ram1_in: std_logic_vector(7 downto 0);
-   signal ram1_counter_clr, ram1_counter_inc: std_logic;
-   signal output_ram1_counter: std_logic_vector(4 downto 0);
+   signal ram1_counter_clr, ram1_counter_inc, ram1_wr: std_logic;
+   signal output_ram1_counter: std_logic_vector(3 downto 0);
    signal ram1_out: std_logic_vector(7 downto 0);
    
    signal ram2_in: std_logic_vector(7 downto 0);
-   signal ram2_counter_clr, ram2_counter_inc: std_logic;
-   signal output_ram2_counter: std_logic_vector(4 downto 0);
+   signal ram2_counter_clr, ram2_counter_inc, ram2_wr: std_logic;
+   signal output_ram2_counter: std_logic_vector(3 downto 0);
    signal ram2_out: std_logic_vector(7 downto 0);
    
    signal ram3_in: std_logic_vector(7 downto 0);
-   signal ram3_counter_clr, ram3_counter_inc: std_logic;
-   signal output_ram3_counter: std_logic_vector(4 downto 0);
+   signal ram3_counter_clr, ram3_counter_inc, ram3_wr: std_logic;
+   signal output_ram3_counter: std_logic_vector(3 downto 0);
    signal ram3_out: std_logic_vector(7 downto 0);
     
    signal ram4_in: std_logic_vector(7 downto 0);
-   signal ram4_counter_clr, ram4_counter_inc: std_logic;
-   signal output_ram4_counter: std_logic_vector(4 downto 0);
+   signal ram4_counter_clr, ram4_counter_inc, ram4_wr: std_logic;
+   signal output_ram4_counter: std_logic_vector(3 downto 0);
    signal ram4_out: std_logic_vector(7 downto 0);
    
    signal ram5_in: std_logic_vector(7 downto 0);
-   signal ram5_counter_clr, ram5_counter_inc: std_logic;
-   signal output_ram5_counter: std_logic_vector(4 downto 0);
+   signal ram5_counter_clr, ram5_counter_inc, ram5_wr: std_logic;
+   signal output_ram5_counter: std_logic_vector(3 downto 0);
    signal ram5_out: std_logic_vector(7 downto 0);
    
    signal ram6_in: std_logic_vector(7 downto 0);
-   signal ram6_counter_clr, ram6_counter_inc: std_logic;
-   signal output_ram6_counter: std_logic_vector(4 downto 0);
+   signal ram6_counter_clr, ram6_counter_inc, ram6_wr: std_logic;
+   signal output_ram6_counter: std_logic_vector(3 downto 0);
    signal ram6_out: std_logic_vector(7 downto 0);
    
    signal ram7_in: std_logic_vector(7 downto 0);
-   signal ram7_counter_clr, ram7_counter_inc: std_logic;
-   signal output_ram7_counter: std_logic_vector(4 downto 0);
+   signal ram7_counter_clr, ram7_counter_inc, ram7_wr: std_logic;
+   signal output_ram7_counter: std_logic_vector(3 downto 0);
    signal ram7_out: std_logic_vector(7 downto 0);   
 
 
    signal ram_block_addr:std_logic_vector(2 downto 0);
    
    signal ram_block_rom_counter_clr, ram_block_rom_counter_inc: std_logic;
-   signal ram_block_rom_addr: std_logic_vector(4 downto 0);
-   signal ram_block_rom_addr_mux: std_logic_vector(4 downto 0);
+   signal ram_block_rom_addr: std_logic_vector(2 downto 0);
+   signal ram_block_rom_addr_mux: std_logic_vector(2 downto 0);
    
-   signal temp_ram_counter_clr, temp_ram_counter_inc: std_logic;
+   signal temp_ram_counter_clr, temp_ram_counter_inc, temp_ram_wr: std_logic;
    signal temp_ram_input: std_logic_vector(7 downto 0);
-   signal temp_ram_addr: std_logic_vector(4 downto 0);
+   signal temp_ram_addr: std_logic_vector(3 downto 0);
    
    signal output_ram_input: std_logic_vector(7 downto 0);
-   signal output_ram_counter_clr, output_ram_counter_inc: std_logic;
-   signal output_ram_addr: std_logic_vector(4 downto 0);
+   signal output_ram_counter_clr, output_ram_counter_inc, output_ram_wr: std_logic;
+   signal output_ram_addr: std_logic_vector(3 downto 0);
    
-   signal addra_rom: std_logic_vector(4 downto 0);
+   signal addra_rom: std_logic_vector(3 downto 0);
    signal key, cphr_out: std_logic_vector(7 downto 0);
    signal wr: std_logic;
 
@@ -103,9 +106,65 @@ begin
     -- FSM
     ctr_path: entity work.ctr_path(arch)
         port map(
-            clk=>clk, reset =>reset,
-            rx_done=>rx_done, tx_done=>tx_done,
-            ascii_r=>input, ascii_t=>output
+            --clk=>clk, reset =>reset,
+            --rx_done=>rx_done, tx_done=>tx_done,
+            --ascii_r=>input, ascii_t=>output,
+            
+            -- Board Controls
+            clk=>clk, reset => reset,
+            
+            -- Reciever
+            rx_done=>rx_done, ascii_r=>input,
+            
+            -- Input RAM counter
+            input_ram_counter_clr=>input_ram_counter_clr,
+            input_ram_counter_inc=>input_ram_counter_inc,
+            
+            -- Input RAM
+            input_ram_wr=>input_ram_wr,
+            
+            -- Input MUX
+            input_mux_switch=>input_mux_switch,
+            
+            -- Shift ROM
+            shift_rom_counter_clr=>shift_rom_counter_clr,
+            shift_rom_counter_inc=>shift_rom_counter_inc,
+            
+            -- RAM BLOCK
+            ram0_wr=>ram0_wr, ram1_wr=>ram1_wr, ram2_wr=>ram2_wr, ram3_wr=>ram3_wr, 
+            ram4_wr=>ram4_wr, ram5_wr=>ram5_wr, ram6_wr=>ram6_wr, ram7_wr=>ram7_wr,
+            
+            ram0_counter_clr=>ram0_counter_clr, ram1_counter_clr=>ram1_counter_clr,
+            ram2_counter_clr=>ram2_counter_clr, ram3_counter_clr=>ram3_counter_clr,
+            ram4_counter_clr=>ram4_counter_clr, ram5_counter_clr=>ram5_counter_clr,
+            ram6_counter_clr=>ram6_counter_clr, ram7_counter_clr=>ram7_counter_clr,
+      
+            ram0_counter_inc=>ram0_counter_inc, ram1_counter_inc=>ram1_counter_inc,
+            ram2_counter_inc=>ram2_counter_inc, ram3_counter_inc=>ram3_counter_inc,
+            ram4_counter_inc=>ram4_counter_inc, ram5_counter_inc=>ram5_counter_inc,
+            ram6_counter_inc=>ram6_counter_inc, ram7_counter_inc=>ram7_counter_inc,
+            
+            -- ROM after RAM BLOCK before temp RAM
+            ram_block_rom_counter_clr=>ram_block_rom_counter_clr,
+            ram_block_rom_counter_inc=>ram_block_rom_counter_inc,
+            
+            -- Temp RAM counter
+            temp_ram_counter_clr=>temp_ram_counter_clr, 
+            temp_ram_counter_inc=>temp_ram_counter_inc,
+                       
+            -- Temp RAM
+            temp_ram_wr=>temp_ram_wr,
+           
+           -- Output RAM counter
+           output_ram_counter_clr=>output_ram_counter_clr, output_ram_counter_inc=>output_ram_counter_inc,
+           
+           -- Output RAM
+           output_ram_wr=>output_ram_wr,
+            
+            -- Transmitter
+            tx_start=>tx_start,
+            tx_done=>tx_done,
+            ascii_t=>output
         );
     -- Reciever 
     uart_rx_unit: entity work.uart_rx(arch)
@@ -137,7 +196,7 @@ begin
     -- Input ram
     input_ram: entity work.input_ram(arch)
         port map (
-        clk=>clk, wr=>wr,
+        clk=>clk, wr=>input_ram_wr,
         din=>input, addr=>input_ram_addr,
         dout=>input_ram_input_mux
         );
@@ -145,7 +204,7 @@ begin
     -- Mux before shift
     input_mux_shift: entity work.input_mux_shift(arch)
         port map(
-            clk=>clk, reset=>reset,
+            clk=>clk, reset=>reset, sel=>input_mux_switch,
             in0=>input_ram_input_mux,
             in1=>temp_ram_input_mux,
             sseg=>shift_input
@@ -169,11 +228,18 @@ begin
             data=>shift_rom_addr_mux
         );
         
+    shift: entity work.shift(arch)
+        port map(
+        din=>shift_input,
+        shift_vector=>shift_rom_addr_mux,
+        dout=>shift_addr_mux
+        );
+        
     -- Mux after shift
     shift_mux_ram_block: entity work.shift_mux_ram_block(arch)
         port map(
             clk=>clk, reset=>reset,
-            sel=>shift_rom_addr_mux,
+            sel=>shift_addr_mux,
             in0=>input_ram_input_mux,
             out0=>ram0_in,
             out1=>ram1_in,
@@ -233,7 +299,7 @@ begin
     -- Temporary ram after RAM Block MUX
     temp_ram: entity work.temp_ram(arch)
         port map (
-            clk=>clk, wr=>wr,
+            clk=>clk, wr=>temp_ram_wr,
             din=>temp_ram_input, addr=>temp_ram_addr,
             dout0=>input_ram_input_mux,
             dout1=>output_ram_input
@@ -253,7 +319,7 @@ begin
     -- Output RAM
     output_ram: entity work.output_ram(arch)
         port map(
-            clk=>clk, wr=>wr,
+            clk=>clk, wr=>output_ram_wr,
             addr=>output_ram_addr,
             din=>output_ram_input,
             dout=>output
@@ -277,7 +343,7 @@ begin
            -- Ram module
            ram0: entity work.ram_block(arch)
            port map(
-                clk=>clk, wr=>wr,
+                clk=>clk, wr=>ram0_wr,
                 addr=>output_ram0_counter,
                 din=>ram0_in, dout=>ram0_out
            );
@@ -297,7 +363,7 @@ begin
            -- Ram module
            ram1: entity work.ram_block(arch)
            port map(
-                clk=>clk, wr=>wr,
+                clk=>clk, wr=>ram1_wr,
                 addr=>output_ram1_counter,
                 din=>ram1_in, dout=>ram1_out
            );        
@@ -317,7 +383,7 @@ begin
            -- Ram module
            ram2: entity work.ram_block(arch)
            port map(
-                clk=>clk, wr=>wr,
+                clk=>clk, wr=>ram2_wr,
                 addr=>output_ram2_counter,
                 din=>ram2_in, dout=>ram2_out
            );
@@ -338,7 +404,7 @@ begin
            -- Ram module
            ram3: entity work.ram_block(arch)
            port map(
-                clk=>clk, wr=>wr,
+                clk=>clk, wr=>ram3_wr,
                 addr=>output_ram3_counter,
                 din=>ram3_in, dout=>ram3_out
            );
@@ -358,7 +424,7 @@ begin
            -- Ram module
            ram4: entity work.ram_block(arch)
            port map(
-                clk=>clk, wr=>wr,
+                clk=>clk, wr=>ram4_wr,
                 addr=>output_ram4_counter,
                 din=>ram4_in, dout=>ram4_out
            );
@@ -378,7 +444,7 @@ begin
            -- Ram module
            ram5: entity work.ram_block(arch)
            port map(
-                clk=>clk, wr=>wr,
+                clk=>clk, wr=>ram5_wr,
                 addr=>output_ram5_counter,
                 din=>ram5_in, dout=>ram5_out
            );
@@ -398,7 +464,7 @@ begin
            -- Ram module
            ram6: entity work.ram_block(arch)
            port map(
-                clk=>clk, wr=>wr,
+                clk=>clk, wr=>ram6_wr,
                 addr=>output_ram6_counter,
                 din=>ram6_in, dout=>ram6_out
            );
@@ -418,7 +484,7 @@ begin
            -- Ram module
            ram7: entity work.ram_block(arch)
            port map(
-                clk=>clk, wr=>wr,
+                clk=>clk, wr=>ram7_wr,
                 addr=>output_ram7_counter,
                 din=>ram7_in, dout=>ram7_out
            );
