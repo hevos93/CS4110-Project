@@ -97,19 +97,11 @@ architecture str_arch of radix is
    signal output_ram_input: std_logic_vector(7 downto 0);
    signal output_ram_counter_clr, output_ram_counter_inc, output_ram_wr: std_logic;
    signal output_ram_addr: std_logic_vector(3 downto 0);
-   
-   signal addra_rom: std_logic_vector(3 downto 0);
-   signal key, cphr_out: std_logic_vector(7 downto 0);
-   signal wr: std_logic;
 
 begin
     -- FSM
     ctr_path: entity work.ctr_path(arch)
         port map(
-            --clk=>clk, reset =>reset,
-            --rx_done=>rx_done, tx_done=>tx_done,
-            --ascii_r=>input, ascii_t=>output,
-            
             -- Board Controls
             clk=>clk, reset => reset,
             

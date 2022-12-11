@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <string.h>
 
-void radix(const char input[], uint8_t* output);
+#define DATA_SIZE 8
+#define DATA_WIDTH 8
+
+void radix(const char input[DATA_SIZE], uint8_t output[DATA_SIZE]);
 
 #endif //RADIX_RADIX_H

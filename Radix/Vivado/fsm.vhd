@@ -8,7 +8,7 @@ entity ctr_path is
 
 	  ascii_r, ascii_t: in std_logic_vector(7 downto 0);
       -- This is to be removed
-      clra_rom, inca_rom, clrb_ram, incb_ram, wr: out std_logic;
+      --clra_rom, inca_rom, clrb_ram, incb_ram, wr: out std_logic;
       
       -- Reciever
       rx_done: in std_logic;
@@ -53,7 +53,7 @@ entity ctr_path is
 end ctr_path;
 
 architecture arch of ctr_path is
-   type state_type is (s0, s1, s2, s3);
+   type state_type is (s0, s1, s2, s3); --, s4, s5, s6);
    signal state_reg, state_next: state_type;
 begin
 
@@ -70,55 +70,172 @@ begin
    -- next-state and outputs logic
    process(state_reg, rx_done, tx_done, ascii_r, ascii_t)
    begin
-   clra_rom <= '0';
-   inca_rom <= '0';
-   clrb_ram <= '0';
-   incb_ram <= '0';
-   wr <= '0';
-   tx_start <= '0';
-   state_next <= state_reg;
+       input_ram_counter_clr <= '0';
+       input_ram_counter_inc <= '0';
+       input_ram_wr <= '0';
+       input_mux_switch <= '1'; -- Directs data from the input RAM to the shift register
+       shift_rom_counter_clr <= '0';
+       shift_rom_counter_inc <= '0';
+       ram0_wr <= '0';
+       ram1_wr <= '0';
+       ram2_wr <= '0';
+       ram3_wr <= '0';
+       ram4_wr <= '0';
+       ram5_wr <= '0';
+       ram6_wr <= '0';
+       ram7_wr <= '0';
+       ram0_counter_clr <= '0';
+       ram1_counter_clr <= '0';
+       ram2_counter_clr <= '0';
+       ram3_counter_clr <= '0';
+       ram4_counter_clr <= '0';
+       ram5_counter_clr <= '0';
+       ram6_counter_clr <= '0';
+       ram7_counter_clr <= '0';
+       ram0_counter_inc <= '0';
+       ram1_counter_inc <= '0';
+       ram2_counter_inc <= '0';
+       ram3_counter_inc <= '0';
+       ram4_counter_inc <= '0';
+       ram5_counter_inc <= '0';
+       ram6_counter_inc <= '0';
+       ram7_counter_inc <= '0';
+       ram_block_rom_counter_clr <= '0';
+       ram_block_rom_counter_inc <= '0';
+       temp_ram_counter_clr <= '0';
+       temp_ram_counter_inc <= '0';
+       temp_ram_wr <= '0';
+       output_ram_counter_clr <= '0';
+       output_ram_counter_inc <= '0';
+       output_ram_wr <= '0';
+       tx_start <= '0';
+       state_next <= state_reg;
    
       case state_reg is
          when s0 =>
-            clra_rom <= '1';
-			clrb_ram <= '1';
+            input_ram_counter_clr <= '1';
+            shift_rom_counter_clr <= '1'; 
+            ram0_counter_clr <= '1';
+            ram1_counter_clr <= '1';
+            ram2_counter_clr <= '1';
+            ram3_counter_clr <= '1';
+            ram4_counter_clr <= '1';
+            ram5_counter_clr <= '1';
+            ram6_counter_clr <= '1';
+            ram7_counter_clr <= '1'; 
+            ram_block_rom_counter_clr <= '1'; 
+            temp_ram_counter_clr <= '1';            
+            output_ram_counter_clr <= '1';
             state_next <= s1;
          when s1 =>
             if (rx_done='1') then
 			   if ((ascii_r >= x"41" and ascii_r <= x"5A") or 
 			       (ascii_r >= x"61" and ascii_r <= x"7A") or 
 			           ascii_r = x"20" or ascii_r = x"0D") then
-                  wr <= '1';
+                          input_ram_wr <= '1';
                   
---                  if (ascii_r = x"20") then   -- Space key?
---                     incb_ram <= '1';
---                     state_next <= s1;
---                  else
-                  
-				  if (ascii_r=x"0D") then  -- Enter key?
-				     clrb_ram <= '1';
-					 state_next <= s2;
-				  else
-				     inca_rom <= '1';
-					 incb_ram <= '1';
-				  end if;
-				  
---				  end if;
-				  
+                          if (ascii_r = x"20") then   -- Space key?
+                             input_ram_counter_inc <= '1';
+                             state_next <= s1;
+                          else
+                          
+                              if (ascii_r=x"0D") then  -- Enter key?
+                                 input_ram_counter_inc <= '1';
+                                 input_ram_counter_clr <= '1';
+                                 state_next <= s2;
+                              else
+                                 --inca_rom <= '1';
+                                 --incb_ram <= '1';
+                                 input_ram_counter_inc <= '1';
+                              end if;
+				  -- Counter increment inside RAM Block?
+            			  end if;
                end if;
 			end if;
+			
          when s2 =>
             if (ascii_t=x"0D") then 
 			   state_next <= s0;
 			else 
-			   tx_start <= '1';
+			   input_ram_wr <= '0';
+			   ram0_wr <= '1';
+               ram1_wr <= '1';
+               ram2_wr <= '1';
+               ram3_wr <= '1';
+               ram4_wr <= '1';
+               ram5_wr <= '1';
+               ram6_wr <= '1';
+               ram7_wr <= '1';
+               
+               if (ascii_r=x"0D") then  -- Enter key?
+                 input_ram_counter_inc <= '1';
+                 input_ram_counter_clr <= '1';
+                 state_next <= s3;
+              else
+                 --inca_rom <= '1';
+                 --incb_ram <= '1';
+                 input_ram_counter_inc <= '1';
+                 shift_rom_counter_inc <= '1';
+              end if;
+               
+			   --tx_start <= '1';
 			   state_next <= s3;
 			end if;
+			
 		 when s3 =>
-		    if (tx_done='1') then  
-			   incb_ram <= '1';
-			   state_next <= s2;
-			end if;
+           ram0_wr <= '0';
+           ram1_wr <= '0';
+           ram2_wr <= '0';
+           ram3_wr <= '0';
+           ram4_wr <= '0';
+           ram5_wr <= '0';
+           ram6_wr <= '0';
+           ram7_wr <= '0';
+           
+           ram0_counter_clr <= '1';
+           ram1_counter_clr <= '1';
+           ram2_counter_clr <= '1';
+           ram3_counter_clr <= '1';
+           ram4_counter_clr <= '1';
+           ram5_counter_clr <= '1';
+           ram6_counter_clr <= '1';
+           ram7_counter_clr <= '1';
+           
+           temp_ram_wr <= '1';
+           
+           -- Increment and empty out ram_blocks from 0 to 8
+           -- Pseudo code below
+--           if (finished sorting) then
+--                state_next=>s4;
+--           else
+--		        if (empty address) then
+--		            state_next=>s2;  
+--              else
+--                   ram_block_rom_counter_inc => '1';
+--                   state_next=>s3;
+               
+--         when s4=>
+--            temp_ram_wr <= '0';
+--            temp_ram_counter_clr <= '1';
+--            output_ram_wr <='1';
+            
+--            if(empty address) then
+--                output_ram_wr <='0';
+--                state_next=>s5;
+--             else
+--             output_ram_counter_inc <= '1';             
+--             temp_ram_counter_inc <= '1';
+--             state_next=>s4;
+            
+--         when s5=>
+--            output_ram_wr=>'0';
+--            output_ram_counter_clr=>'0';
+--            rx_start=>'1';
+            
+--            if(rx_done=1) then
+--                state_next=>s0;
+--            else
+--                output_ram_counter_inc=>'1';            
       end case;
    end process;
 

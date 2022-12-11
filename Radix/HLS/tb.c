@@ -5,14 +5,17 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-//#include <radix.h>
+#include "radix.h"
 
-int tb_main(){
-    char in[] = "2,3,4,5,6";
+int main(){
+
+	printf("Ooogabooga");
+
+	char in[] = "computer";
     uint8_t out;
 
     printf("\n Output: ");
 
-    radix(in, out);
+    radix(in, &out);
     printf("%d", out);
 }
